@@ -2,10 +2,8 @@ package im.juliank.minesweeper.ui
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -23,13 +21,5 @@ fun MinesweeperScreen(modifier: Modifier, viewModel: MinesweeperViewModel = view
         Canvas(modifier = Modifier.fillMaxSize()) {
             drawRect(Color.Black, size = this.size)
         }
-    }
-}
-
-@Composable
-fun FlagCheckbox(modifier: Modifier, isFlagMode: Boolean, onClick: (Boolean) -> Unit) {
-    Row(modifier = modifier) {
-        Checkbox(checked = isFlagMode, onCheckedChange = onClick)
-        Text("Place flags")
     }
 }
