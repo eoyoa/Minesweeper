@@ -29,12 +29,16 @@ fun MinesweeperScreen(modifier: Modifier, viewModel: MinesweeperViewModel = view
                 viewModel.isFlagMode = newVal
             }
         )
-        MinesweeperBoard(viewModel.board, cellCallback = viewModel::onCellClick)
+        MinesweeperBoard(cellCallback = viewModel::onCellClick)
     }
 }
 
 @Composable
-fun MinesweeperBoard(board: Array<Array<CellType>>, cellCallback: (CellCoord) -> Unit) {
+fun MinesweeperBoard(
+    cellCallback: (CellCoord) -> Unit,
+    viewModel: MinesweeperViewModel = viewModel()
+) {
+    val board = viewModel.board
     val rows = board.size
     val cols = board[0].size
 
@@ -43,7 +47,7 @@ fun MinesweeperBoard(board: Array<Array<CellType>>, cellCallback: (CellCoord) ->
             .fillMaxWidth(0.8f)
             .aspectRatio(cols.toFloat() / rows)
             .pointerInput(key1 = Unit) {
-                detectTapGestures {offset ->
+                detectTapGestures { offset ->
                     val x = floor((offset.x / size.width) * cols).toInt()
                     val y = floor((offset.y / size.height) * rows).toInt()
                     cellCallback(CellCoord(x, y))
@@ -74,23 +78,36 @@ fun MinesweeperBoard(board: Array<Array<CellType>>, cellCallback: (CellCoord) ->
                     (row.toFloat() / board.size) * size.height
                 )
 
-                when (board[row][col]) {
-                    CellType.REVEALED -> {
-                        drawRect(
-                            color = Color.Blue,
-                            topLeft = location,
-                            size = Size(cellSize, cellSize))
-                    }
-                    CellType.MINE -> {
+                if (board[row][col] == CellState.UNOPENED) {
+                    continue
+                }
+
+                when (viewModel.numbers[row][col]) {
+                    -1 -> {
                         drawCircle(
                             color = Color.Black,
                             radius = cellSize / 2,
                             center = Offset(location.x + cellSize / 2, location.y + cellSize / 2)
                         )
                     }
-                    else -> Unit
+                    0 -> {
+                        drawRect(
+                            color = Color.Blue,
+                            topLeft = location,
+                            size = Size(cellSize, cellSize)
+                        )
+                    }
+                    else -> {
+                        drawRect(
+                            color = Color.Red,
+                            topLeft = location,
+                            size = Size(cellSize, cellSize)
+                        )
+                    }
                 }
             }
         }
+
     }
+
 }
