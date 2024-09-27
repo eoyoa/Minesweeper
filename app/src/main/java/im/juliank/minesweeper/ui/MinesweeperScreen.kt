@@ -107,7 +107,5 @@ fun MinesweeperBoard(
                 }
             }
         }
-
     }
-
 }

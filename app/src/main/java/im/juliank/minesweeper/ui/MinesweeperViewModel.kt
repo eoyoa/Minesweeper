@@ -1,6 +1,5 @@
 package im.juliank.minesweeper.ui
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -73,7 +72,6 @@ class MinesweeperViewModel: ViewModel() {
     }
 
     fun onCellClick(coord: CellCoord) {
-        Log.d("CLICK", "CLICKED x: ${coord.x}, y: ${coord.y}")
         val newBoard = board.copyOf()
 
         if (numbers[coord.y][coord.x] == -1) {
@@ -98,7 +96,6 @@ class MinesweeperViewModel: ViewModel() {
     }
 
     private fun reveal(newBoard: Array<Array<CellState>>, coord: CellCoord) {
-        Log.d("REVEAL", "REVEALING x: ${coord.x}, y: ${coord.y}")
         if (isOutOfBounds(coord.y, coord.x)) {
             return
         }
