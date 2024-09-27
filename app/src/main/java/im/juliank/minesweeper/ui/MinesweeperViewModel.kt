@@ -6,15 +6,24 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import kotlin.random.Random
 
+enum class GameState {
+    WON,
+    LOST,
+    IN_PROGRESS
+}
+
 enum class CellType {
     MINE,
-    NONE
+    NONE,
+    REVEALED
 }
 
 class CellCoord(val x: Int, val y: Int)
 
 class MinesweeperViewModel: ViewModel() {
     var isFlagMode by mutableStateOf(false)
+
+    var currentState by mutableStateOf(GameState.IN_PROGRESS)
 
     val rows = 16
     val cols = 9
@@ -42,7 +51,15 @@ class MinesweeperViewModel: ViewModel() {
 
     fun onCellClick(coord: CellCoord) {
         val newBoard = board.copyOf()
-        newBoard[coord.y][coord.x] = CellType.MINE
+
+        if (board[coord.y][coord.x] == CellType.MINE) {
+            currentState = GameState.LOST
+            return
+        }
+
+        newBoard[coord.y][coord.x] = CellType.REVEALED
+
+        // calculate remaining cells
 
         board = newBoard
     }

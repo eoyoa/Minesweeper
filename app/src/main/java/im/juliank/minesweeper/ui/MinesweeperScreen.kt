@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
@@ -50,36 +51,45 @@ fun MinesweeperBoard(board: Array<Array<CellType>>, cellCallback: (CellCoord) ->
             }
             .border(1.dp, Color.Black)
     ) {
-        val colWidth = size.width / cols
+        val cellSize = size.minDimension / cols
         for (i in 1 until cols) {
             drawLine(
                 color = Color.Black,
-                start = Offset(colWidth * i, 0f),
-                end = Offset(colWidth * i, size.height)
+                start = Offset(cellSize * i, 0f),
+                end = Offset(cellSize * i, size.height)
             )
         }
-
-        val rowHeight = size.height / rows
         for (i in 1 until rows) {
             drawLine(
                 color = Color.Black,
-                start = Offset(0f, rowHeight * i),
-                end = Offset(size.width, rowHeight * i)
+                start = Offset(0f, cellSize * i),
+                end = Offset(size.width, cellSize * i)
             )
         }
 
         for (row in board.indices) {
             for (col in 0 until board[0].size) {
-                if (board[row][col] != CellType.MINE) continue
-
-                drawCircle(
-                    color = Color.Black,
-                    radius = colWidth / 2,
-                    center = Offset(
-                        (col.toFloat() / board[0].size) * size.width + colWidth / 2,
-                        (row.toFloat() / board.size) * size.height + colWidth / 2
-                    )
+                val location = Offset(
+                    (col.toFloat() / board[0].size) * size.width,
+                    (row.toFloat() / board.size) * size.height
                 )
+
+                when (board[row][col]) {
+                    CellType.REVEALED -> {
+                        drawRect(
+                            color = Color.Blue,
+                            topLeft = location,
+                            size = Size(cellSize, cellSize))
+                    }
+                    CellType.MINE -> {
+                        drawCircle(
+                            color = Color.Black,
+                            radius = cellSize / 2,
+                            center = Offset(location.x + cellSize / 2, location.y + cellSize / 2)
+                        )
+                    }
+                    else -> Unit
+                }
             }
         }
     }
