@@ -27,7 +27,7 @@ class MinesweeperViewModel: ViewModel() {
 
     val rows = 16
     val cols = 9
-    val mines = 3
+    val mines = 10
 
     var board by mutableStateOf(
         Array(rows) { Array(cols) { CellState.UNOPENED } }
@@ -87,7 +87,6 @@ class MinesweeperViewModel: ViewModel() {
         }
 
         reveal(newBoard, coord)
-
         board = newBoard
     }
 

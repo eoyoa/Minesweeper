@@ -15,6 +15,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.Constraints
@@ -77,6 +78,7 @@ fun MinesweeperBoard(
             )
         }
 
+        var noUnopened = true
         for (row in board.indices) {
             for (col in 0 until board[0].size) {
                 val location = Offset(
@@ -85,11 +87,13 @@ fun MinesweeperBoard(
                 )
                 val textLayoutResult = textMeasurer.measure(
                     "${viewModel.numbers[row][col]}",
-                    constraints = Constraints.fixed(size.width.toInt(), size.height.toInt())
+                    constraints = Constraints.fixed(size.width.toInt(), size.height.toInt()),
+                    style = TextStyle(fontSize = cellSize.toSp())
                 )
 
                 when {
                     board[row][col] == CellState.UNOPENED -> {
+                        noUnopened = false
                         continue
                     }
                     board[row][col] == CellState.FLAGGED -> {
@@ -131,6 +135,10 @@ fun MinesweeperBoard(
                     }
                 }
             }
+        }
+
+        if (noUnopened) {
+            viewModel.currentState = GameState.WON
         }
     }
 }
