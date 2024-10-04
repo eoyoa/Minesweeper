@@ -14,6 +14,9 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.text.drawText
+import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlin.math.floor
@@ -41,6 +44,8 @@ fun MinesweeperBoard(
     val board = viewModel.board
     val rows = board.size
     val cols = board[0].size
+
+    val textMeasurer = rememberTextMeasurer()
 
     Canvas(
         modifier = Modifier
@@ -77,6 +82,10 @@ fun MinesweeperBoard(
                     (col.toFloat() / board[0].size) * size.width,
                     (row.toFloat() / board.size) * size.height
                 )
+                val textLayoutResult = textMeasurer.measure(
+                    "${viewModel.numbers[row][col]}",
+                    constraints = Constraints.fixed(size.width.toInt(), size.height.toInt())
+                )
 
                 if (board[row][col] == CellState.UNOPENED) {
                     continue
@@ -102,6 +111,10 @@ fun MinesweeperBoard(
                             color = Color.Red,
                             topLeft = location,
                             size = Size(cellSize, cellSize)
+                        )
+                        drawText(
+                            textLayoutResult,
+                            topLeft = location
                         )
                     }
                 }
