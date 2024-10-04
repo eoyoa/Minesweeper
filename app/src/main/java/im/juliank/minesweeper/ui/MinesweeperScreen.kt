@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -87,8 +88,19 @@ fun MinesweeperBoard(
                     constraints = Constraints.fixed(size.width.toInt(), size.height.toInt())
                 )
 
-                if (board[row][col] == CellState.UNOPENED) {
-                    continue
+                when {
+                    board[row][col] == CellState.UNOPENED -> {
+                        continue
+                    }
+                    board[row][col] == CellState.FLAGGED -> {
+                        drawRoundRect(
+                            color = Color.Green,
+                            topLeft = location,
+                            size = Size(cellSize, cellSize),
+                            cornerRadius = CornerRadius(cellSize / 2, cellSize / 2)
+                        )
+                        continue
+                    }
                 }
 
                 when (viewModel.numbers[row][col]) {

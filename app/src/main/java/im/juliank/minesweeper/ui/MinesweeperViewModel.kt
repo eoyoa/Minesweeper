@@ -74,6 +74,12 @@ class MinesweeperViewModel: ViewModel() {
     fun onCellClick(coord: CellCoord) {
         val newBoard = board.copyOf()
 
+        if (isFlagMode) {
+            newBoard[coord.y][coord.x] = CellState.FLAGGED
+            board = newBoard
+            return
+        }
+
         if (numbers[coord.y][coord.x] == -1) {
             currentState = GameState.LOST
             board = Array(rows) { Array(cols) { CellState.OPENED } }
