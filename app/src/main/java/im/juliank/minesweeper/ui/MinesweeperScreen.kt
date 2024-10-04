@@ -25,8 +25,10 @@ import kotlin.math.floor
 
 @Composable
 fun MinesweeperScreen(modifier: Modifier, viewModel: MinesweeperViewModel = viewModel()) {
+    val playing = viewModel.currentState == GameState.IN_PROGRESS
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Text("Minesweeper")
+        if (!playing) Text("You ${viewModel.currentState.name.lowercase()}!")
         FlagCheckbox(
             modifier = Modifier.fillMaxWidth(),
             viewModel.isFlagMode,
@@ -78,7 +80,7 @@ fun MinesweeperBoard(
             )
         }
 
-        var noUnopened = true
+        var remainingUnchecked = 0
         for (row in board.indices) {
             for (col in 0 until board[0].size) {
                 val location = Offset(
@@ -91,20 +93,17 @@ fun MinesweeperBoard(
                     style = TextStyle(fontSize = cellSize.toSp())
                 )
 
-                when {
-                    board[row][col] == CellState.UNOPENED -> {
-                        noUnopened = false
-                        continue
-                    }
-                    board[row][col] == CellState.FLAGGED -> {
+                if (board[row][col] != CellState.OPENED) {
+                    remainingUnchecked++
+                    if (board[row][col] == CellState.FLAGGED) {
                         drawRoundRect(
                             color = Color.Green,
                             topLeft = location,
                             size = Size(cellSize, cellSize),
                             cornerRadius = CornerRadius(cellSize / 2, cellSize / 2)
                         )
-                        continue
                     }
+                    continue
                 }
 
                 when (viewModel.numbers[row][col]) {
@@ -137,7 +136,7 @@ fun MinesweeperBoard(
             }
         }
 
-        if (noUnopened) {
+        if (remainingUnchecked == viewModel.mines) {
             viewModel.currentState = GameState.WON
         }
     }
