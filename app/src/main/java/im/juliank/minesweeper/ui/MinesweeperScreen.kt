@@ -18,7 +18,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
-import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlin.math.floor
@@ -89,8 +88,7 @@ fun MinesweeperBoard(
                 )
                 val textLayoutResult = textMeasurer.measure(
                     "${viewModel.numbers[row][col]}",
-                    constraints = Constraints.fixed(size.width.toInt(), size.height.toInt()),
-                    style = TextStyle(fontSize = cellSize.toSp())
+                    style = TextStyle(fontSize = cellSize.toSp(), color = Color.White)
                 )
 
                 if (board[row][col] != CellState.OPENED) {
@@ -129,7 +127,7 @@ fun MinesweeperBoard(
                         )
                         drawText(
                             textLayoutResult,
-                            topLeft = location
+                            topLeft = Offset(location.x + (cellSize - textLayoutResult.size.width) / 2, location.y + (cellSize - textLayoutResult.size.height) / 2)
                         )
                     }
                 }
