@@ -18,7 +18,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MinesweeperTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    MinesweeperScreen(modifier = Modifier.padding(innerPadding))
+                    MinesweeperScreen(modifier = Modifier.fillMaxSize().padding(innerPadding))
                 }
             }
         }
