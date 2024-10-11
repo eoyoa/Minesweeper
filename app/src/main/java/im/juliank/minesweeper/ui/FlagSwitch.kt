@@ -8,13 +8,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import im.juliank.minesweeper.R
 
 @Composable
 fun FlagSwitch(modifier: Modifier, isFlagMode: Boolean, onClick: (Boolean) -> Unit) {
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
         Switch(checked = isFlagMode, onCheckedChange = onClick)
         Spacer(modifier = modifier.size(10.dp))
-        Text("Place flags")
+        Text(stringResource(R.string.flag_mode_switch))
     }
 }
